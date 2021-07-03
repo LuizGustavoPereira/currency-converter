@@ -24,7 +24,7 @@ public class CurrencyInformationUtil {
 
     @Scheduled(cron = "0 0 1 * * ?")
     @PostConstruct
-    public void UpdateCurrencyInformation() {
+    public void updateCurrencyInformation() {
         try {
             currencyInformationRepository.save(getCurrencyInformation());
         } catch (Exception e) {
