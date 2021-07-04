@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CurrencyConverterControllerTest {
+class CurrencyConverterControllerTest {
 
     @Mock
     private CurrencyConverterService currencyConverterService;
@@ -40,7 +40,7 @@ public class CurrencyConverterControllerTest {
     }
 
     @Test
-    public void performSuccessConversion() throws Exception {
+    void performSuccessConversion() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BRL", 5.00))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.finalValue").value(25))
@@ -48,14 +48,14 @@ public class CurrencyConverterControllerTest {
     }
 
     @Test
-    public void performFailConversion() throws Exception {
+    void performFailConversion() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BLR", 5.00))
                 .andDo(print()).andExpect(status().isInternalServerError())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidCalculationException));
     }
 
     @Test
-    public void getConversionsByUserFail() throws Exception {
+    void getConversionsByUserFail() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/findTransactionsByUserId/{userId}", 5))
                 .andDo(print()).andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException));
