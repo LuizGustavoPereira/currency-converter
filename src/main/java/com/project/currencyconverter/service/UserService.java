@@ -1,4 +1,4 @@
-package com.project.currencyconverter.util;
+package com.project.currencyconverter.service;
 
 import com.project.currencyconverter.model.User;
 import com.project.currencyconverter.repository.UserRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class UserUtil {
+public class UserService {
 
     @Autowired
     UserRepository userRepository;
