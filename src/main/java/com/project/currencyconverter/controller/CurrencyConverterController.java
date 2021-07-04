@@ -1,6 +1,6 @@
 package com.project.currencyconverter.controller;
 
-import com.project.currencyconverter.model.TransactionInformation;
+import com.project.currencyconverter.model.ConversionInformation;
 import com.project.currencyconverter.service.CurrencyConverterService;
 import com.project.currencyconverter.v1.CurrencyConverterResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ public class CurrencyConverterController implements CurrencyConverterResource {
     CurrencyConverterService currencyConverterService;
 
     @Override
-    public List<TransactionInformation> getTransactionByUser(Long userId) {
-        return null;
+    public List<ConversionInformation> getConversionsByUser(Long userId) {
+        return currencyConverterService.getConversionByUser(userId);
     }
 
     @Override
-    public TransactionInformation postTransaction(String currencyFrom, String currencyTo, Double amount) {
+    public ConversionInformation postConversion(String currencyFrom, String currencyTo, Double amount) {
         return currencyConverterService.performConversion(currencyFrom, currencyTo, amount);
     }
 }

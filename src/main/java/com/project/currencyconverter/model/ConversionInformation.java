@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TransactionInformation {
+public class ConversionInformation {
     @Id
     @GeneratedValue
     private Long id;

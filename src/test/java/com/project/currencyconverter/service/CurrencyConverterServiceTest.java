@@ -2,16 +2,22 @@ package com.project.currencyconverter.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.project.currencyconverter.exception.InvalidCalculationException;
+import com.project.currencyconverter.exception.UserNotFoundException;
+import com.project.currencyconverter.model.ConversionInformation;
 import com.project.currencyconverter.model.CurrencyInformation;
-import com.project.currencyconverter.model.TransactionInformation;
-import com.project.currencyconverter.model.User;
 import com.project.currencyconverter.repository.CurrencyConverterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.Conversion;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static com.project.currencyconverter.util.JsonUtil.fileToObjectClass;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,44 +38,70 @@ public class CurrencyConverterServiceTest {
     @Mock
     private UserService userService;
 
-    @BeforeEach
-    public void beforeEach(){
+
+    public void setup() {
         when(currencyInformationService.getCurrencyInformation()).thenReturn(fileToObjectClass("currency.json", new TypeReference<CurrencyInformation>() {
         }));
     }
 
     @Test
     public void performValidConversion() {
-        when(currencyConverterRepository.saveAndFlush(any())).thenReturn(buildTransaction());
+        setup();
+        ConversionInformation conversionInformation = converterService.calculateConversion("USD", "BRL", 5.00);
 
-        TransactionInformation transactionInformation = converterService.performConversion("USD", "BRL", new Double("5.00"));
-
-        assertEquals(transactionInformation.getFinalValue(), new Double("25.29335440370838"));
+        assertEquals(conversionInformation.getConversionTax(), 5.058670880741676);
+        assertEquals(conversionInformation.getFinalValue(), 25.29335440370838);
     }
 
     @Test
     public void performValidConversionForCurrencyEqualsBase() {
-        when(currencyConverterRepository.saveAndFlush(any())).thenReturn(buildTransaction());
+        setup();
+        ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", 5.00);
 
-        TransactionInformation transactionInformation = converterService.performConversion("EUR", "BRL", new Double("5.00"));
+        assertEquals(conversionInformation.getConversionTax(), 6.002113);
+        assertEquals(conversionInformation.getFinalValue(), 30.010565);
 
-        assertEquals(transactionInformation.getFinalValue(), new Double("25.29335440370838"));
     }
 
     @Test
     public void performInvalidConversion() {
-        Exception exception  = assertThrows(InvalidCalculationException.class, () -> converterService.performConversion("USD", "BRT", new Double("5.00")));
+        setup();
+        Exception exception = assertThrows(InvalidCalculationException.class, () -> converterService.performConversion("USD", "BRT", 5.00));
     }
 
-    public TransactionInformation buildTransaction() {
-        return TransactionInformation
-                .builder()
-                .user(new User())
-                .originValue(new Double("5.00"))
-                .toCurrency("BRL")
-                .fromCurrency("USD")
-                .finalValue(new Double ("25.29335440370838"))
-                .conversionTax(new Double("5.02"))
-                .build();
+    @Test
+    public void getConversionByUser() {
+        when(currencyConverterRepository.getAllByUserId(any())).thenReturn(buildListConversion(true));
+
+        ConversionInformation conversionInformation = converterService.getConversionByUser(2l).get(0);
+
+        assertEquals(conversionInformation.getId(), 1l);
     }
+
+    @Test
+    public void thorwExceptionWhenGettingConversionByUser() {
+        when(currencyConverterRepository.getAllByUserId(any())).thenReturn(buildListConversion(false));
+
+        Exception exception = assertThrows(UserNotFoundException.class, () -> converterService.getConversionByUser(3l));
+    }
+
+    private List<ConversionInformation> buildListConversion(boolean isValid) {
+        if(isValid){
+            return Arrays.asList(
+                    ConversionInformation
+                        .builder()
+                        .id(1l)
+                        .conversionTax(1.00)
+                        .fromCurrency("EUR")
+                        .toCurrency("BRL")
+                        .finalValue(6.00)
+                        .date(new Date())
+                        .originValue(1.00)
+                        .build()
+            );
+        }
+
+        return Collections.emptyList();
+    }
+
 }
