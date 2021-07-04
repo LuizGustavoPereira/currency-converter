@@ -22,7 +22,7 @@ public class UserService {
         return userRepository.findAll().get(0);
     }
 
-    private User buildUser(){
+    public User buildUser(){
         return User
                 .builder()
                 .email("teste@teste.com")
