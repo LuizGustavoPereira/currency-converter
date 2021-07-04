@@ -25,6 +25,13 @@ public class ControllerAdvisor {
         return status(NOT_FOUND).body(err);
     }
 
+    @ExceptionHandler(InvalidCalculationException.class)
+    public ResponseEntity<StandardError> invaliCalculation(InvalidCalculationException e, HttpServletRequest request) {
+        StandardError err = new StandardError(currentTimeMillis(), INTERNAL_SERVER_ERROR.value(), "User not found", e.getMessage(), neutralize(request.getRequestURI()));
+        log.info("InvalidCalculationException: {}", neutralize(e.getMessage()));
+        return status(INTERNAL_SERVER_ERROR).body(err);
+    }
+
     private String neutralize(String value) {
         if (value == null) {
             return null;
