@@ -24,16 +24,16 @@ public class CurrencyConverterService {
     private final ObjectMapper mapper;
 
 
-    public ConversionInformation performConversion(String currencyFrom, String currencyTo, Double amount) {
-        return currencyConverterRepository.saveAndFlush(calculateConversion(currencyFrom, currencyTo, amount));
+    public ConversionInformation performConversion(String currencyFrom, String currencyTo, Double amount, String userName) {
+        return currencyConverterRepository.saveAndFlush(calculateConversion(currencyFrom, currencyTo, amount, userName));
     }
 
-    protected ConversionInformation calculateConversion(String currencyFrom, String currencyTo, Double amount) {
+    protected ConversionInformation calculateConversion(String currencyFrom, String currencyTo, Double amount, String userName) {
         final CurrencyInformation currencyInformation = currencyInformationService.getCurrencyInformation();
         Double taxRate = calculateTaxRate(getCurrencyTax(currencyInformation, currencyFrom), getCurrencyTax(currencyInformation, currencyTo));
         Double finalAmount = amount * taxRate;
 
-        return buildTransactionInformation(currencyFrom, currencyTo, amount, taxRate, finalAmount);
+        return buildTransactionInformation(currencyFrom, currencyTo, amount, taxRate, finalAmount, userName);
     }
 
     private Double getCurrencyTax(CurrencyInformation currencyInformation, String currency) {
@@ -63,10 +63,10 @@ public class CurrencyConverterService {
         return infoList;
     }
 
-    private ConversionInformation buildTransactionInformation(String currencyFrom, String currencyTo, Double amount, Double taxRate, Double finalAmount) {
+    private ConversionInformation buildTransactionInformation(String currencyFrom, String currencyTo, Double amount, Double taxRate, Double finalAmount, String userName) {
         return ConversionInformation
                 .builder()
-                .user(userService.getUser())
+                .user(userService.getUser(userName))
                 .fromCurrency(currencyFrom)
                 .originValue(amount)
                 .toCurrency(currencyTo)

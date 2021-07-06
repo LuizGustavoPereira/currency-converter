@@ -30,7 +30,7 @@ public class UserServiceTest {
 
     @Test
     public void getUser() {
-        User user = userService.getUser();
+        User user = userService.getUser("UserTest");
 
         assertEquals(user.getEmail(), "teste@teste.com");
     }
@@ -39,7 +39,7 @@ public class UserServiceTest {
         return User
                 .builder()
                 .email("teste@teste.com")
-                .name("User Test")
+                .userName("UserTest")
                 .build();
     }
 }

@@ -48,7 +48,7 @@ public class CurrencyConverterServiceTest {
     @Test
     void performValidConversion() {
         setup();
-        ConversionInformation conversionInformation = converterService.calculateConversion("USD", "BRL", 5.00);
+        ConversionInformation conversionInformation = converterService.calculateConversion("USD", "BRL", 5.00, "userTest");
 
         assertEquals(conversionInformation.getConversionTax(), 5.058670880741676);
         assertEquals(conversionInformation.getFinalValue(), 25.29335440370838);
@@ -57,7 +57,7 @@ public class CurrencyConverterServiceTest {
     @Test
     void performValidConversionForCurrencyEqualsBase() {
         setup();
-        ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", 5.00);
+        ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", 5.00, "userTest");
 
         assertEquals(conversionInformation.getConversionTax(), 6.002113);
         assertEquals(conversionInformation.getFinalValue(), 30.010565);
@@ -67,7 +67,7 @@ public class CurrencyConverterServiceTest {
     @Test
     void performInvalidConversion() {
         setup();
-        Exception exception = assertThrows(InvalidCalculationException.class, () -> converterService.performConversion("USD", "BRT", 5.00));
+        Exception exception = assertThrows(InvalidCalculationException.class, () -> converterService.performConversion("USD", "BRT", 5.00,"userTest"));
     }
 
     @Test

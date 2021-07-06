@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class CurrencyConverterController {
             @ApiResponse(responseCode = "500", description = ""),
     })
     @GetMapping(value = "/convertCurrency/{currencyFrom}/{currencyTo}/{amount}")
-    public ResponseEntity<ConversionInformation> postConversion(@PathVariable String currencyFrom, @PathVariable String currencyTo, @PathVariable Double amount) {
-        return ResponseEntity.ok(currencyConverterService.performConversion(currencyFrom, currencyTo, amount));
+    public ResponseEntity<ConversionInformation> postConversion(@PathVariable String currencyFrom, @PathVariable String currencyTo, @PathVariable Double amount, @RequestHeader String userName) {
+        return ResponseEntity.ok(currencyConverterService.performConversion(currencyFrom, currencyTo, amount, userName));
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Data
@@ -21,6 +22,8 @@ public class User {
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
+    @Column(unique = true)
     private String userName;
+    @Column(unique = true)
     private String email;
 }

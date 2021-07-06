@@ -13,20 +13,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @PostConstruct
-    public void saveUser() {
-        userRepository.saveAndFlush(buildUser());
+    public User saveUser(User userRequest) {
+        return userRepository.saveAndFlush(userRequest);
     }
 
-    public User getUser() {
-        return userRepository.findAll().get(0);
-    }
-
-    public User buildUser() {
-        return User
-                .builder()
-                .email("teste@teste.com")
-                .userName("User Test")
-                .build();
+    public User getUser(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

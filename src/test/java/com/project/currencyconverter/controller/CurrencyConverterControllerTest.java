@@ -51,7 +51,7 @@ class CurrencyConverterControllerTest {
 
     @Test
     void performSuccessConversion() throws Exception {
-        when(currencyConverterService.performConversion(any(), any(), any())).thenReturn(buildInformationResponse());
+        when(currencyConverterService.performConversion(any(), any(), any(), any())).thenReturn(buildInformationResponse());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BRL", 5.00))
                 .andDo(print()).andExpect(status().isOk())
@@ -61,7 +61,7 @@ class CurrencyConverterControllerTest {
 
     @Test
     void performFailConversion() throws Exception {
-        when(currencyConverterService.performConversion(any(), any(), any())).thenThrow(InvalidCalculationException.class);
+        when(currencyConverterService.performConversion(any(), any(), any(), any())).thenThrow(InvalidCalculationException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BLR", 5.00))
                 .andDo(print()).andExpect(status().isInternalServerError())
@@ -70,7 +70,7 @@ class CurrencyConverterControllerTest {
 
     @Test
     void getConversionsByUserFail() throws Exception {
-        when(currencyConverterService.performConversion(any(), any(), any())).thenThrow(UserNotFoundException.class);
+        when(currencyConverterService.performConversion(any(), any(), any(), any())).thenThrow(UserNotFoundException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/findTransactionsByUserId/{userId}", 5))
                 .andDo(print()).andExpect(status().isNotFound())
