@@ -2,15 +2,15 @@ package com.project.currencyconverter.service;
 
 import com.project.currencyconverter.model.User;
 import com.project.currencyconverter.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
-@Component
+@Service
+@AllArgsConstructor
 public class UserService {
 
-    @Autowired
     UserRepository userRepository;
 
     @PostConstruct
@@ -22,7 +22,7 @@ public class UserService {
         return userRepository.findAll().get(0);
     }
 
-    public User buildUser(){
+    public User buildUser() {
         return User
                 .builder()
                 .email("teste@teste.com")

@@ -1,25 +1,27 @@
 package com.project.currencyconverter.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.project.currencyconverter.exception.NoCurrencyInformationException;
 import com.project.currencyconverter.model.CurrencyInformation;
 import com.project.currencyconverter.repository.CurrencyInformationRepository;
 import com.project.currencyconverter.util.JsonUtil;
+import lombok.AllArgsConstructor;
 import org.hibernate.PersistentObjectException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerErrorException;
 
 import javax.annotation.PostConstruct;
 
-@Component
+@Service
+@Transactional
+@AllArgsConstructor
 public class CurrencyInformationService {
 
+    private final CurrencyInformationRepository currencyInformationRepository;
     private final RestTemplate restTemplate = new RestTemplate();
-
-    @Autowired
-    private CurrencyInformationRepository currencyInformationRepository;
 
     @Scheduled(cron = "0 0 1 * * ?")
     @PostConstruct
@@ -32,12 +34,16 @@ public class CurrencyInformationService {
     }
 
     public CurrencyInformation getCurrencyInformation() {
-        return currencyInformationRepository.findAll().get(0);
+        CurrencyInformation information = currencyInformationRepository.findByBase("EUR");
+        if (information == null) {
+            throw new NoCurrencyInformationException("Sorry! Could not find any currency information");
+        }
+        return information;
     }
 
     private CurrencyInformation getExternalInformation() {
         try {
-            //return jsonToObject(restTemplate.getForEntity("http://data.fixer.io/api/latest?access_key=5dbfdfd415dcae0fd60f6a8f67297e86&base=EUR&symbols=USD,CAD,BRL", String.class).getBody());
+            //return jsonToObject(restTemplate.getForEntity("http://data.fixer.io/api/latest?access_key=5dbfdfd415dcae0fd60f6a8f67297e86&base=EUR", String.class).getBody());
             return JsonUtil.fileToObjectClass("currency.json", new TypeReference<CurrencyInformation>() {
             });
         } catch (Exception e) {

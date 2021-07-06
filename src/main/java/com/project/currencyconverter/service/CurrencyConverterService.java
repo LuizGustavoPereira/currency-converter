@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.currencyconverter.exception.InvalidCalculationException;
 import com.project.currencyconverter.exception.UserNotFoundException;
-import com.project.currencyconverter.model.CurrencyInformation;
 import com.project.currencyconverter.model.ConversionInformation;
+import com.project.currencyconverter.model.CurrencyInformation;
 import com.project.currencyconverter.repository.CurrencyConverterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,21 +15,20 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class CurrencyConverterService {
 
-    @Autowired
-    private CurrencyConverterRepository currencyConverterRepository;
-    @Autowired
-    private CurrencyInformationService currencyInformationService;
-    @Autowired
-    private UserService userService;
+    private final CurrencyConverterRepository currencyConverterRepository;
+    private final CurrencyInformationService currencyInformationService;
+    private final UserService userService;
+    private final ObjectMapper mapper;
 
 
     public ConversionInformation performConversion(String currencyFrom, String currencyTo, Double amount) {
         return currencyConverterRepository.saveAndFlush(calculateConversion(currencyFrom, currencyTo, amount));
     }
 
-    protected ConversionInformation calculateConversion (String currencyFrom, String currencyTo, Double amount) {
+    protected ConversionInformation calculateConversion(String currencyFrom, String currencyTo, Double amount) {
         final CurrencyInformation currencyInformation = currencyInformationService.getCurrencyInformation();
         Double taxRate = calculateTaxRate(getCurrencyTax(currencyInformation, currencyFrom), getCurrencyTax(currencyInformation, currencyTo));
         Double finalAmount = amount * taxRate;
@@ -37,25 +36,12 @@ public class CurrencyConverterService {
         return buildTransactionInformation(currencyFrom, currencyTo, amount, taxRate, finalAmount);
     }
 
-    private ConversionInformation buildTransactionInformation(String currencyFrom, String currencyTo, Double amount, Double taxRate, Double finalAmount) {
-        return ConversionInformation
-                .builder()
-                .user(userService.getUser())
-                .fromCurrency(currencyFrom)
-                .originValue(amount)
-                .toCurrency(currencyTo)
-                .finalValue(finalAmount)
-                .conversionTax(taxRate)
-                .date(new Date())
-                .build();
-    }
-
     private Double getCurrencyTax(CurrencyInformation currencyInformation, String currency) {
-        ObjectMapper mapper = new ObjectMapper();
-        if(currency.equals(currencyInformation.getBase())){
-            return new Double("1.00");
+        if (currency.equals(currencyInformation.getBase())) {
+            return 1.00;
         }
-        Map<String, Double> currencyTax = mapper.convertValue(currencyInformation.getRates(), new TypeReference<Map<String, Double>>() {});
+        Map<String, Double> currencyTax = mapper.convertValue(currencyInformation.getRates(), new TypeReference<Map<String, Double>>() {
+        });
         return currencyTax.get(currency);
 
     }
@@ -75,5 +61,18 @@ public class CurrencyConverterService {
         }
 
         return infoList;
+    }
+
+    private ConversionInformation buildTransactionInformation(String currencyFrom, String currencyTo, Double amount, Double taxRate, Double finalAmount) {
+        return ConversionInformation
+                .builder()
+                .user(userService.getUser())
+                .fromCurrency(currencyFrom)
+                .originValue(amount)
+                .toCurrency(currencyTo)
+                .finalValue(finalAmount)
+                .conversionTax(taxRate)
+                .date(new Date())
+                .build();
     }
 }
