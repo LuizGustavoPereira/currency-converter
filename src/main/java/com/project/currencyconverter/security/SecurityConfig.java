@@ -40,8 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         final OAuth2ResourceServerConfigurer<HttpSecurity>.JwtConfigurer jwt = http.authorizeRequests()
-                .mvcMatchers("/findTransactionsByUserId/*").authenticated()
-                .mvcMatchers("/convertCurrency/*").authenticated()
+                .anyRequest().authenticated()
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
     }

@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 @AllArgsConstructor
 public class UserService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     public void saveUser() {
@@ -26,7 +26,7 @@ public class UserService {
         return User
                 .builder()
                 .email("teste@teste.com")
-                .name("User Test")
+                .userName("User Test")
                 .build();
     }
 }

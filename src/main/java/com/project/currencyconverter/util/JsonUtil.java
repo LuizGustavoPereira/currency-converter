@@ -25,7 +25,7 @@ public class JsonUtil {
         }
     }
 
-    private static CurrencyInformation jsonToObject(String responseEntity) {
+    public static CurrencyInformation jsonToObject(String responseEntity) {
         try {
             return mapper.readValue(responseEntity, CurrencyInformation.class);
         } catch (JsonProcessingException e) {

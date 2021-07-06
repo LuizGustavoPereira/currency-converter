@@ -21,8 +21,6 @@ public class User {
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-    private String name;
+    private String userName;
     private String email;
-    private String password;
-    private String token;
 }

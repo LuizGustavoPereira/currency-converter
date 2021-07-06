@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "application.id",
+      "type": "java.lang.String",
+      "description": "Description for application.id."
+    },
+    {
+      "name": "application.db",
+      "type": "java.lang.String",
+      "description": "Description for application.db."
+    }
+  ] }
