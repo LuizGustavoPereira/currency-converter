@@ -37,7 +37,7 @@ public class CurrencyConverterService {
     }
 
     private Double getCurrencyTax(CurrencyInformation currencyInformation, String currency) {
-        if (currency.equals(currencyInformation.getBase())) {
+        if (currency.equalsIgnoreCase(currencyInformation.getBase())) {
             return 1.00;
         }
         Map<String, Double> currencyTax = mapper.convertValue(currencyInformation.getRates(), new TypeReference<Map<String, Double>>() {
