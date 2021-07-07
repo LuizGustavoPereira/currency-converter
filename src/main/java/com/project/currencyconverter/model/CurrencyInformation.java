@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Transient;
 import java.util.Date;
 
@@ -21,7 +22,6 @@ import java.util.Date;
 @Entity
 public class CurrencyInformation {
     @Id
-    @GeneratedValue
     private Long id;
     @Transient
     private boolean success;
@@ -29,6 +29,7 @@ public class CurrencyInformation {
     private long timestamp;
     private String base;
     private Date date;
+    @Lob
     private String ratesString;
     private String errorString;
 

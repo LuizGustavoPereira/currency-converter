@@ -1,45 +1,65 @@
 package com.project.currencyconverter.service;
 
+import com.project.currencyconverter.exception.UserAlreadyExistException;
+import com.project.currencyconverter.exception.UserNotFoundException;
 import com.project.currencyconverter.model.User;
 import com.project.currencyconverter.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-
+import static com.project.currencyconverter.util.ObjectMock.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(JUnitPlatform.class)
 public class UserServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    UserRepository userRepository = mock(UserRepository.class);
 
     @InjectMocks
-    UserService userService;
+    UserService userService = new UserService(userRepository);
 
-    @BeforeEach
-    public void beforeEach() {
-        when(userRepository.findAll()).thenReturn(Arrays.asList(buildUser()));
+    @Test
+    public void getUserTest() {
+        when(userRepository.findByUserName(any())).thenReturn(buildUser());
+
+        User user = userService.getUser("UserTest");
+
+        assertEquals(user.getEmail(), "teste@teste.com");
+        assertEquals(user.getUserName(), "UserTest");
     }
 
     @Test
-    public void getUser() {
-        User user = userService.getUser();
+    public void getUserTestFail() {
+        when(userRepository.findByUserName(any())).thenReturn(null);
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUser("UserTest"));
+
+    }
+
+    @Test
+    public void saveUserTest() {
+        when(userRepository.saveAndFlush(any())).thenReturn(buildUser());
+
+        User user = userService.saveUser(buildUser());
 
         assertEquals(user.getEmail(), "teste@teste.com");
+        assertEquals(user.getUserName(), "UserTest");
     }
 
-    public static User buildUser() {
-        return User
-                .builder()
-                .email("teste@teste.com")
-                .name("User Test")
-                .build();
+    @Test
+    public void saveUserTestFail() {
+        when(userRepository.saveAndFlush(any())).thenThrow(new UserAlreadyExistException("User already exists."));
+
+        assertThrows(UserAlreadyExistException.class, () -> userService.saveUser(buildUser()));
     }
 }
+
+
