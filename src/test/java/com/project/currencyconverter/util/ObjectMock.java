@@ -1,8 +1,8 @@
 package com.project.currencyconverter.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.project.currencyconverter.model.ConversionInformation;
 import com.project.currencyconverter.model.CurrencyInformation;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.project.currencyconverter.model.User;
 
 import java.util.Date;
@@ -18,7 +18,7 @@ public class ObjectMock {
     public static ConversionInformation buildInformationResponse() {
         return ConversionInformation
                 .builder()
-                .id(1l)
+                .id(1L)
                 .conversionTax(5.00)
                 .toCurrency("BRL")
                 .fromCurrency("USD")
@@ -32,7 +32,7 @@ public class ObjectMock {
     public static User buildUser() {
         return User
                 .builder()
-                .id(1l)
+                .id(1L)
                 .email("teste@teste.com")
                 .userName("UserTest")
                 .build();

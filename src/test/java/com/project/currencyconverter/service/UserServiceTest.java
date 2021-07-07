@@ -32,8 +32,8 @@ public class UserServiceTest {
 
         User user = userService.getUser("UserTest");
 
-        assertEquals(user.getEmail(), "teste@teste.com");
-        assertEquals(user.getUserName(), "UserTest");
+        assertEquals("teste@teste.com", user.getEmail());
+        assertEquals("UserTest", user.getUserName());
     }
 
     @Test
@@ -50,8 +50,8 @@ public class UserServiceTest {
 
         User user = userService.saveUser(buildUser());
 
-        assertEquals(user.getEmail(), "teste@teste.com");
-        assertEquals(user.getUserName(), "UserTest");
+        assertEquals("teste@teste.com", user.getEmail());
+        assertEquals("UserTest", user.getUserName());
     }
 
     @Test

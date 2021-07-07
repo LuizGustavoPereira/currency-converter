@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnitPlatform.class)
@@ -29,10 +31,12 @@ public class CurrencyInformationTest {
 
 
     @Test
-    public void updateCurrencyInformationSuccessTest() {
+    public void updateCurrencyInformationSuccessTest() throws NoSuchMethodException {
         when(currencyInformationRepository.saveAndFlush(any())).thenReturn(buildCurrencyInformation());
 
         currencyInformationService.updateCurrencyInformation();
+
+        verify(currencyInformationRepository,times(1)).saveAndFlush(any());
     }
 
     @Test
@@ -49,9 +53,9 @@ public class CurrencyInformationTest {
 
         CurrencyInformation currencyInformation = currencyInformationService.getCurrencyInformation();
 
-        assertEquals(currencyInformation.getBase(), "EUR");
-        assertEquals(currencyInformation.getErrorString(), null);
-        assertEquals(currencyInformation.getError(), null);
+        assertEquals("EUR", currencyInformation.getBase());
+        assertEquals(null, currencyInformation.getErrorString());
+        assertEquals(null, currencyInformation.getError());
         assertNotEquals(null, currencyInformation.getRatesString());
         assertNotEquals(null, currencyInformation.getRates());
     }
