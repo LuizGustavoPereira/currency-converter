@@ -54,10 +54,10 @@ public class CurrencyConverterService {
         }
     }
 
-    public List<ConversionInformation> getConversionByUser(Long userId) {
-        List<ConversionInformation> infoList = currencyConverterRepository.getAllByUserId(userId);
+    public List<ConversionInformation> getConversionByUser(String userName) {
+        List<ConversionInformation> infoList = currencyConverterRepository.getAllByUserName(userName);
         if (infoList.isEmpty()) {
-            throw new UserNotFoundException("Could not find user for Id: " + userId);
+            throw new UserNotFoundException("Could not find user " + userName);
         }
 
         return infoList;

@@ -15,6 +15,8 @@ import org.springframework.web.server.ServerErrorException;
 
 import javax.annotation.PostConstruct;
 
+import static com.project.currencyconverter.util.JsonUtil.jsonToObject;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class CurrencyInformationService {
     @PostConstruct
     public void updateCurrencyInformation() {
         try {
-            currencyInformationRepository.save(getExternalInformation());
+            currencyInformationRepository.saveAndFlush(getExternalInformation());
         } catch (Exception e) {
             throw new PersistentObjectException("Error when trying to persist information, cause = " + e.getCause());
         }
@@ -43,7 +45,9 @@ public class CurrencyInformationService {
 
     private CurrencyInformation getExternalInformation() {
         try {
-            //return jsonToObject(restTemplate.getForEntity("http://data.fixer.io/api/latest?access_key=5dbfdfd415dcae0fd60f6a8f67297e86&base=EUR", String.class).getBody());
+//            CurrencyInformation currencyInformation =  jsonToObject(restTemplate.getForEntity("http://data.fixer.io/api/latest?access_key=5dbfdfd415dcae0fd60f6a8f67297e86&base=EUR", String.class).getBody());
+//            currencyInformation.setId(1l);
+//            return currencyInformation;
             return JsonUtil.fileToObjectClass("currency.json", new TypeReference<CurrencyInformation>() {
             });
         } catch (Exception e) {

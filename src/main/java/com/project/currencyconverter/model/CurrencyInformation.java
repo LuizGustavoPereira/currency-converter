@@ -22,7 +22,6 @@ import java.util.Date;
 @Entity
 public class CurrencyInformation {
     @Id
-    @GeneratedValue
     private Long id;
     @Transient
     private boolean success;

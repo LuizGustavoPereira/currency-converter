@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 
 import static java.lang.System.currentTimeMillis;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.status;
@@ -26,16 +27,16 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(InvalidCalculationException.class)
     public ResponseEntity<StandardError> invaliCalculation(InvalidCalculationException e, HttpServletRequest request) {
-        StandardError err = new StandardError(currentTimeMillis(), INTERNAL_SERVER_ERROR.value(), "Invalid calculation", e.getMessage(), neutralize(request.getRequestURI()));
+        StandardError err = new StandardError(currentTimeMillis(), BAD_REQUEST.value(), "Invalid calculation", e.getMessage(), neutralize(request.getRequestURI()));
         log.info("InvalidCalculationException: {}", neutralize(e.getMessage()));
-        return status(INTERNAL_SERVER_ERROR).body(err);
+        return status(BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(NoCurrencyInformationException.class)
     public ResponseEntity<StandardError> noCurrencyInformation(NoCurrencyInformationException e, HttpServletRequest request) {
-        StandardError err = new StandardError(currentTimeMillis(), INTERNAL_SERVER_ERROR.value(), "Could not find any currency information", e.getMessage(), neutralize(request.getRequestURI()));
+        StandardError err = new StandardError(currentTimeMillis(), BAD_REQUEST.value(), "Could not find any currency information", e.getMessage(), neutralize(request.getRequestURI()));
         log.info("NoCurrencyInformationException: {}", neutralize(e.getMessage()));
-        return status(INTERNAL_SERVER_ERROR).body(err);
+        return status(BAD_REQUEST).body(err);
     }
 
     private String neutralize(String value) {

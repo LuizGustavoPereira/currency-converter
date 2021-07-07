@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface CurrencyConverterRepository extends JpaRepository<ConversionInformation, Long> {
 
-    @Query("SELECT c FROM ConversionInformation c where c.user.id = :userId")
-    public List<ConversionInformation> getAllByUserId(Long userId);
+    @Query("SELECT c FROM ConversionInformation c where c.user.userName = :userName")
+    List<ConversionInformation> getAllByUserName(String userName);
 }
