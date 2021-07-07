@@ -8,6 +8,7 @@ import com.project.currencyconverter.model.ConversionInformation;
 import com.project.currencyconverter.model.CurrencyInformation;
 import com.project.currencyconverter.repository.CurrencyConverterRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CurrencyConverterService {
 
     private final CurrencyConverterRepository currencyConverterRepository;
@@ -25,6 +27,7 @@ public class CurrencyConverterService {
 
 
     public ConversionInformation performConversion(String currencyFrom, String currencyTo, Double amount, String userName) {
+        log.info("Performing conversion: currencyFrom = {}, currencyTo = {}, amount = {}, userName = {}", currencyFrom, currencyTo, amount, userName);
         return currencyConverterRepository.saveAndFlush(calculateConversion(currencyFrom, currencyTo, amount, userName));
     }
 
@@ -48,8 +51,12 @@ public class CurrencyConverterService {
 
     private Double calculateTaxRate(Double amountFrom, Double amountTo) {
         try {
+            if(amountFrom <= 0.0 || amountTo <= 0.0){
+                return 0.0;
+            }
             return amountTo / amountFrom;
         } catch (Exception e) {
+            log.info("Invalid calculation: {}/{}", amountTo, amountFrom);
             throw new InvalidCalculationException("Invalid calculation: " + amountTo + " / " + amountFrom);
         }
     }
