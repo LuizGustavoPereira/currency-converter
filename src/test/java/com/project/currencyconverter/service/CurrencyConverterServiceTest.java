@@ -45,11 +45,11 @@ public class CurrencyConverterServiceTest {
         setup();
         ConversionInformation conversionInformation = converterService.calculateConversion("USD", "BRL", 5.00, "userTest");
 
-        assertEquals(conversionInformation.getFromCurrency(), "USD");
-        assertEquals(conversionInformation.getToCurrency(), "BRL");
-        assertEquals(conversionInformation.getOriginValue(), 5.00);
-        assertEquals(conversionInformation.getConversionTax(), 5.058670880741676);
-        assertEquals(conversionInformation.getFinalValue(), 25.29335440370838);
+        assertEquals("USD", conversionInformation.getFromCurrency());
+        assertEquals("BRL", conversionInformation.getToCurrency());
+        assertEquals(5.00, conversionInformation.getOriginValue());
+        assertEquals(5.058670880741676, conversionInformation.getConversionTax());
+        assertEquals(25.29335440370838, conversionInformation.getFinalValue());
     }
 
     @Test
@@ -57,8 +57,28 @@ public class CurrencyConverterServiceTest {
         setup();
         ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", 5.00, "userTest");
 
-        assertEquals(conversionInformation.getConversionTax(), 6.002113);
-        assertEquals(conversionInformation.getFinalValue(), 30.010565);
+        assertEquals(6.002113, conversionInformation.getConversionTax());
+        assertEquals(30.010565, conversionInformation.getFinalValue());
+
+    }
+
+    @Test
+    void performValidConversionForNegativesBase() {
+        setup();
+        ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", -10.0, "userTest");
+
+        assertEquals(6.002113, conversionInformation.getConversionTax());
+        assertEquals(0, conversionInformation.getFinalValue());
+
+    }
+
+    @Test
+    void performValidConversionForZeroBase() {
+        setup();
+        ConversionInformation conversionInformation = converterService.calculateConversion("EUR", "BRL", 0.0, "userTest");
+
+        assertEquals( 6.002113, conversionInformation.getConversionTax());
+        assertEquals(0, conversionInformation.getFinalValue());
 
     }
 
@@ -74,7 +94,7 @@ public class CurrencyConverterServiceTest {
 
         ConversionInformation conversionInformation = converterService.getConversionByUser("userTest").get(0);
 
-        assertEquals(conversionInformation.getId(), 1l);
+        assertEquals(1l, conversionInformation.getId());
     }
 
     @Test

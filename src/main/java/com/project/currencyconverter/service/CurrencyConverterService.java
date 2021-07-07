@@ -34,7 +34,7 @@ public class CurrencyConverterService {
     protected ConversionInformation calculateConversion(String currencyFrom, String currencyTo, Double amount, String userName) {
         final CurrencyInformation currencyInformation = currencyInformationService.getCurrencyInformation();
         Double taxRate = calculateTaxRate(getCurrencyTax(currencyInformation, currencyFrom), getCurrencyTax(currencyInformation, currencyTo));
-        Double finalAmount = amount * taxRate;
+        Double finalAmount = verifyAmount(amount) * taxRate;
 
         return buildTransactionInformation(currencyFrom, currencyTo, amount, taxRate, finalAmount, userName);
     }
@@ -51,9 +51,6 @@ public class CurrencyConverterService {
 
     private Double calculateTaxRate(Double amountFrom, Double amountTo) {
         try {
-            if(amountFrom <= 0.0 || amountTo <= 0.0){
-                return 0.0;
-            }
             return amountTo / amountFrom;
         } catch (Exception e) {
             log.info("Invalid calculation: {}/{}", amountTo, amountFrom);
@@ -68,6 +65,10 @@ public class CurrencyConverterService {
         }
 
         return infoList;
+    }
+
+    public Double verifyAmount(Double amount) {
+        return amount <= 0.0 ? 0.0 : amount;
     }
 
     private ConversionInformation buildTransactionInformation(String currencyFrom, String currencyTo, Double amount, Double taxRate, Double finalAmount, String userName) {
