@@ -27,7 +27,7 @@ public class CurrencyConverterController {
             @ApiResponse(responseCode = "404", description = ""),
             @ApiResponse(responseCode = "500", description = ""),
     })
-    @GetMapping(value = "/findTransactionsByUserId/{userName}")
+    @GetMapping(value = "/findTransactionsByUserName/{userName}")
     public ResponseEntity<List<ConversionInformation>> getConversionsByUser(@PathVariable String userName) {
         return ResponseEntity.ok(currencyConverterService.getConversionByUser(userName));
     }
