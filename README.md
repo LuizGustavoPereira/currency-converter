@@ -56,7 +56,7 @@ First we gonna to talk about, is the one used to do conversions, for this one we
 URL: currency from, currency to and the amount. On the header we have to pass the token Authorization Bearer
 access token, and the username
 ```
-curl --location --request GET 'https://currency-converter-service.herokuapp.com/api/convertCurrency/AUD/USD/-1' \
+curl --location --request POST 'https://currency-converter-service.herokuapp.com/api/convertCurrency/AUD/USD/1' \
 --header 'userName: joeDoe' \
 --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im9HWVZBZ09ldndyN2JyMXJMeldodiJ9.eyJpc3MiOiJodHRwczovL2Rldi0zdTJocTltci51cy5hdXRoMC5jb20vIiwic3ViIjoiSktLQ21seHA3NnhTTWpjaXhha2lIRFh6c2pOTjN5cDNAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vY3VycmVuY3ktY29udmVydGVyLXNlcnZpY2UuaGVyb2t1YXBwLmNvbS8iLCJpYXQiOjE2MjU2MTk5OTgsImV4cCI6MTYyNTcwNjM5OCwiYXpwIjoiSktLQ21seHA3NnhTTWpjaXhha2lIRFh6c2pOTjN5cDMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.tDAiSpi9wExYw-cSxhWiLQ_nu6tG4ESy1J77A1ZeiEndhF1Bn6XomIPGXa6FulTkO7jCce0o4Fjh5kvnS2kEn42v1xDOPoQruO2JpsRgynuLEgfEsRtm5q4tgb98WYkr_-oJpHLght-rD70v4JGxlvqF_RBxBzil7llOqfoFcO-Co8Xx4s1KcjY6S5yLAuxwRmAohbo68JRUZfb1_X0mqULDBgB8Q5EUg2_SPKp-yjgUERm8-twjvbqtOEZ8bI1uFgVhsCgFTpVv-093nsFlVMZq4K-SbqbRp8wM1vdd-swriyV6YQvHCue4MmjitPBLEFdradG_1DCM5ULqAUazKQ'
 ```
