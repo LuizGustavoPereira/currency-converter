@@ -49,12 +49,12 @@ public class CurrencyConverterService {
 
     }
 
-    private Double calculateTaxRate(Double amountFrom, Double amountTo) {
+    private Double calculateTaxRate(Double taxFrom, Double taxTo) {
         try {
-            return amountTo / amountFrom;
+            return taxTo / taxFrom;
         } catch (Exception e) {
-            log.info("Invalid calculation: {}/{}", amountTo, amountFrom);
-            throw new InvalidCalculationException("Invalid calculation: " + amountTo + " / " + amountFrom);
+            log.info("Invalid calculation: {}/{}", taxTo, taxFrom);
+            throw new InvalidCalculationException("Invalid calculation: " + taxTo + " / " + taxFrom);
         }
     }
 

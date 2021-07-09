@@ -42,7 +42,7 @@ class CurrencyConverterControllerTest {
     void performSuccessConversion() throws Exception {
         when(currencyConverterService.performConversion(any(), any(), any(), any())).thenReturn(buildInformationResponse());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BRL", 5.00)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BRL", 5.00)
                 .header("userName", "NameTest"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.finalValue").value(25.00))
@@ -53,7 +53,7 @@ class CurrencyConverterControllerTest {
     void performFailConversion() {
         when(currencyConverterService.performConversion(any(), any(), any(), any())).thenThrow(new InvalidCalculationException("Invalid calculation"));
 
-        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.get("/api/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BLR", 5.00)
+        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.post("/api/convertCurrency/{currencyFrom}/{currencyTo}/{amount}", "USD", "BLR", 5.00)
                 .header("userName", "NameTest"))
                 .andDo(print()).andExpect(status().isBadRequest())
         );
@@ -63,7 +63,7 @@ class CurrencyConverterControllerTest {
     void getConversionsByUserFail() {
         when(currencyConverterService.getConversionByUser(any())).thenThrow(new UserNotFoundException("User not found"));
 
-        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserId/{userName}", "userTest"))
+        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserName/{userName}", "userTest"))
                 .andDo(print()).andExpect(status().isNotFound()));
     }
 
@@ -71,7 +71,7 @@ class CurrencyConverterControllerTest {
     void getConversionsByUserSuccess() throws Exception {
         when(currencyConverterService.getConversionByUser(any())).thenReturn(Arrays.asList(buildInformationResponse()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserId/{userName}", "userTest"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserName/{userName}", "userTest"))
                 .andDo(print()).andExpect(status().isOk());
     }
 
