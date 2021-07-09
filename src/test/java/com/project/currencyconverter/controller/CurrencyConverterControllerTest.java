@@ -63,7 +63,7 @@ class CurrencyConverterControllerTest {
     void getConversionsByUserFail() {
         when(currencyConverterService.getConversionByUser(any())).thenThrow(new UserNotFoundException("User not found"));
 
-        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserId/{userName}", "userTest"))
+        assertThrows(NestedServletException.class, () -> mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserName/{userName}", "userTest"))
                 .andDo(print()).andExpect(status().isNotFound()));
     }
 
@@ -71,7 +71,7 @@ class CurrencyConverterControllerTest {
     void getConversionsByUserSuccess() throws Exception {
         when(currencyConverterService.getConversionByUser(any())).thenReturn(Arrays.asList(buildInformationResponse()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserId/{userName}", "userTest"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/findTransactionsByUserName/{userName}", "userTest"))
                 .andDo(print()).andExpect(status().isOk());
     }
 
