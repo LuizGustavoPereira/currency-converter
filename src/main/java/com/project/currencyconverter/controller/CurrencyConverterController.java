@@ -23,9 +23,9 @@ public class CurrencyConverterController {
     private final CurrencyConverterService currencyConverterService;
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = ""),
-            @ApiResponse(responseCode = "404", description = ""),
-            @ApiResponse(responseCode = "500", description = ""),
+            @ApiResponse(responseCode = "200", description = "All conversions done by this user are returned"),
+            @ApiResponse(responseCode = "404", description = "User not found."),
+            @ApiResponse(responseCode = "500", description = "Internal error when trying to find conversions."),
     })
     @GetMapping(value = "/findTransactionsByUserName/{userName}")
     public ResponseEntity<List<ConversionInformation>> getConversionsByUser(@PathVariable String userName) {
@@ -33,9 +33,9 @@ public class CurrencyConverterController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = ""),
-            @ApiResponse(responseCode = "404", description = ""),
-            @ApiResponse(responseCode = "500", description = ""),
+            @ApiResponse(responseCode = "200", description = "Conversion is done and information are returned."),
+            @ApiResponse(responseCode = "404", description = "Currency not found"),
+            @ApiResponse(responseCode = "500", description = "Internal error when trying to do the conversion"),
     })
     @GetMapping(value = "/convertCurrency/{currencyFrom}/{currencyTo}/{amount}")
     public ResponseEntity<ConversionInformation> postConversion(@PathVariable String currencyFrom, @PathVariable String currencyTo, @PathVariable Double amount, @RequestHeader String userName) {
