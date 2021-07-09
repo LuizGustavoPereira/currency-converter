@@ -2,6 +2,7 @@ package com.project.currencyconverter.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.currencyconverter.exception.AnyConversionFoundException;
 import com.project.currencyconverter.exception.InvalidCalculationException;
 import com.project.currencyconverter.exception.UserNotFoundException;
 import com.project.currencyconverter.model.ConversionInformation;
@@ -61,7 +62,7 @@ public class CurrencyConverterService {
     public List<ConversionInformation> getConversionByUser(String userName) {
         List<ConversionInformation> infoList = currencyConverterRepository.getAllByUserName(userName);
         if (infoList.isEmpty()) {
-            throw new UserNotFoundException("Could not find user " + userName);
+            throw new AnyConversionFoundException("Any conversion found for use " + userName);
         }
 
         return infoList;

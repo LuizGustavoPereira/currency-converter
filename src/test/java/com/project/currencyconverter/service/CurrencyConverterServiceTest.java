@@ -1,6 +1,7 @@
 package com.project.currencyconverter.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.currencyconverter.exception.AnyConversionFoundException;
 import com.project.currencyconverter.exception.InvalidCalculationException;
 import com.project.currencyconverter.exception.UserNotFoundException;
 import com.project.currencyconverter.model.ConversionInformation;
@@ -101,7 +102,7 @@ public class CurrencyConverterServiceTest {
     void throwExceptionWhenGettingConversionByUser() {
         when(currencyConverterRepository.getAllByUserName(any())).thenReturn(buildListConversion(false));
 
-        Exception exception = assertThrows(UserNotFoundException.class, () -> converterService.getConversionByUser("userTest"));
+        Exception exception = assertThrows(AnyConversionFoundException.class, () -> converterService.getConversionByUser("userTest"));
     }
 
     private List<ConversionInformation> buildListConversion(boolean isValid) {
