@@ -38,6 +38,13 @@ public class ControllerAdvisor {
         return status(BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(AnyConversionFoundException.class)
+    public ResponseEntity<StandardError> userNotFound(AnyConversionFoundException e, HttpServletRequest request) {
+        StandardError err = new StandardError(currentTimeMillis(), NOT_FOUND.value(), "Any conversion found for this user.", e.getMessage(), neutralize(request.getRequestURI()));
+        log.info("AnyConversionFoundException: {}", neutralize(e.getMessage()));
+        return status(NOT_FOUND).body(err);
+    }
+
     private String neutralize(String value) {
         if (value == null) {
             return null;

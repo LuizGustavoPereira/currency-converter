@@ -51,12 +51,6 @@ public class CurrencyInformationService {
             CurrencyInformation currencyInformation =  jsonToObject(restTemplate.getForEntity("http://data.fixer.io/api/latest?access_key=5dbfdfd415dcae0fd60f6a8f67297e86&base=EUR", String.class).getBody());
             currencyInformation.setId(1L);
             return currencyInformation;
-
-//            CurrencyInformation currencyInformation = fileToObjectClass("currency.json", new TypeReference<CurrencyInformation>() {
-//            });
-//
-//            currencyInformation.setId(1l);
-//            return currencyInformation;
         } catch (Exception e) {
             throw new ServerErrorException("Could not reach out to fixer API", e.getCause());
         }
